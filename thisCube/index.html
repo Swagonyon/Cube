@@ -1,0 +1,70 @@
+<html>
+
+<head>
+<title>Rubik's Cube Interactive</title>
+<meta charset="iso-8859-1">
+<!--<link rel="stylesheet" type="text/css" href="css/canvas.css">-->
+
+<!-- *************************  -->
+<!-- * CSS Style for Buttons *  -->
+<!-- *************************  -->  
+<link rel="stylesheet" type="text/css" href="someStyle.css"></link>    
+
+<!-- ****************************  -->
+<!-- * Utility Javascript files *  -->
+<!-- ****************************  -->
+<script type="text/javascript" src="gl-matrix.js"></script>
+<script type="text/javascript" src="webgl-utils.js"></script>
+
+
+<!-- *******************  -->
+<!-- * Fragment shader *  -->
+<!-- *******************  -->
+<script id="shader-fs" type="x-shader/x-fragment">
+	precision mediump float;
+	varying vec4 vColor;
+	varying vec2 vTextureCoord;
+	
+	uniform sampler2D uSampler;
+	void main(void) {
+		gl_FragColor = vColor * texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+	}
+	
+</script>
+
+<!-- *****************  -->
+<!-- * Vertex shader *  -->
+<!-- *****************  -->
+<script id="shader-vs" type="x-shader/x-vertex">
+	attribute vec3 aVertexPosition;
+	attribute vec4 aVertexColor;
+	attribute vec2 aTextureCoord;
+	uniform mat4 uMVMatrix;
+	uniform mat4 uPMatrix;
+	varying vec4 vColor;
+	varying vec2 vTextureCoord;
+	void main(void) {
+		gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+		vColor = aVertexColor;
+		vTextureCoord = aTextureCoord;
+	}
+	
+</script>
+
+<!-- ****************  -->
+<!-- * Main program *  -->
+<!-- ****************  -->
+<script type="text/javascript" src="globalStuff.js"></script>
+<script type="text/javascript" src="main.js"></script>
+
+</head>
+
+<body onload="startRubik()">
+    <center>
+        <button class="button" onclick="scramble()"><span>Scramble</span></button>
+        <button class="button" onclick="solve()"><span>Solve</span></button>
+    </center>
+    <canvas id="project-canvas"></canvas>
+</body>
+	
+</html>
